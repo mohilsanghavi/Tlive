@@ -84,7 +84,9 @@ for name, rows in sheets:
         w.append(r)
 out = ROOT / "data"
 out.mkdir(exist_ok=True)
-stamp = now.strftime("%Y-%m-%d")
-wb.save(out / f"Chartink_Groups_{stamp}.xlsx")
-wb.save(out / "Chartink_Groups_latest.xlsx")
-print("saved", stamp)
+KEEP_DAYS = 2   # change this number to keep more or fewer days
+wb.save(out / f"Chartink_Groups_{now.strftime('%Y-%m-%d')}.xlsx")
+files = sorted(out.glob("Chartink_Groups_????-??-??.xlsx"))
+for old_file in files[:-KEEP_DAYS]:
+    old_file.unlink()
+print("saved", now.strftime("%Y-%m-%d %H:%M"), "| kept", [f.name for f in files[-KEEP_DAYS:]])
