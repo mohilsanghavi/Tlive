@@ -1,9 +1,9 @@
 name: Chartink groups to Excel
 on:
   schedule:
-    - cron: "30 5 * * 1-5"    # 11:00 am IST, Mon-Fri
-    - cron: "30 9 * * 1-5"    # 3:00 pm IST, Mon-Fri
-    - cron: "0 11 * * 1-5"    # 4:30 pm IST, Mon-Fri
+    - cron: "23 5 * * 1-5"    # ~10:53 am IST, Mon-Fri
+    - cron: "17 9 * * 1-5"    # ~2:47 pm IST, Mon-Fri
+    - cron: "43 10 * * 1-5"   # ~4:13 pm IST, Mon-Fri
   workflow_dispatch: {}        # lets you run it by hand from the Actions tab
 permissions:
   contents: write
