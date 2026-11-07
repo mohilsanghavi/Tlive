@@ -84,7 +84,7 @@ for name, rows in sheets:
         w.append(r)
 out = ROOT / "data"
 out.mkdir(exist_ok=True)
-KEEP_DAYS = 2   # change this number to keep more or fewer days
+KEEP_DAYS = 4   # change this number to keep more or fewer days
 wb.save(out / f"Chartink_Groups_{now.strftime('%Y-%m-%d')}.xlsx")
 files = sorted(out.glob("Chartink_Groups_????-??-??.xlsx"))
 for old_file in files[:-KEEP_DAYS]:
