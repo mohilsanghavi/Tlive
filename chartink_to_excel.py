@@ -73,6 +73,27 @@ with sync_playwright() as p:
         time.sleep(0.5)
     browser.close()
 
+def sheet_json(rows):
+    """rows -> list of {header: value} like the suite would read from the Excel sheet (blank rows skipped, blanks as "")."""
+    if not rows:
+        return []
+    seen, hdr = {}, []
+    for h in rows[0]:
+        h = "" if h is None else str(h)
+        if h in seen:
+            seen[h] += 1
+            h = f"{h}_{seen[h]}"
+        else:
+            seen[h] = 0
+        hdr.append(h)
+    out = []
+    for r in rows[1:]:
+        if all(v is None or v == "" for v in r):
+            continue
+        out.append({h: ("" if (i >= len(r) or r[i] is None) else r[i]) for i, h in enumerate(hdr)})
+    return out
+
+
 wb = Workbook()
 ws = wb.active
 ws.title = "Summary"
@@ -84,9 +105,17 @@ for name, rows in sheets:
         w.append(r)
 out = ROOT / "data"
 out.mkdir(exist_ok=True)
-KEEP_DAYS = 4   # change this number to keep more or fewer days
+KEEP_DAYS = 2   # change this number to keep more or fewer days
 wb.save(out / f"Chartink_Groups_{now.strftime('%Y-%m-%d')}.xlsx")
+# Fast copy for the suite: the same data as JSON (the suite reads this instead of opening the Excel)
+fast = {"v": 1, "stamp": now.strftime("%Y-%m-%d %H:%M"),
+        "sheets": {"Summary": {"aoa": summary}}}
+for name, rows in sheets:
+    fast["sheets"][name] = {"rows": sheet_json(rows)}
+fast["names"] = ["Summary"] + [n for n, _ in sheets]
+(out / f"Chartink_Groups_{now.strftime('%Y-%m-%d')}.json").write_text(json.dumps(fast, separators=(",", ":"), allow_nan=False), encoding="utf-8")
 files = sorted(out.glob("Chartink_Groups_????-??-??.xlsx"))
 for old_file in files[:-KEEP_DAYS]:
     old_file.unlink()
+    old_file.with_suffix(".json").unlink(missing_ok=True)
 print("saved", now.strftime("%Y-%m-%d %H:%M"), "| kept", [f.name for f in files[-KEEP_DAYS:]])
