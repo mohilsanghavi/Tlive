@@ -25,10 +25,10 @@
     {"name": "nifty midcap 100", "id": "1090585", "on": false},
     {"name": "nifty midcap 150", "id": "1090588", "on": false},
     {"name": "nifty midcap select", "id": "1090579", "on": false},
-    {"name": "nifty mid smallcap 400", "id": "1090575", "on": false},
+    {"name": "nifty mid smallcap 400", "id": "1090575", "on": true},
     {"name": "nifty smallcap 50", "id": "1090568", "on": false},
     {"name": "nifty smallcap 100", "id": "1090587", "on": false},
     {"name": "nifty smallcap 250", "id": "1090572", "on": false},
-    {"name": "nifty microcap 250", "id": "1090582", "on": false}
+    {"name": "nifty microcap 250", "id": "1090582", "on": true}
   ]
 }
